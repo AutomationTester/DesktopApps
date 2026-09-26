@@ -1,0 +1,18 @@
+# ------------------------------------------------------------------
+# PROD environment config  (used by examples/05_env_configs.py)
+# Automation against prod is usually READ-ONLY smoke checks.
+# ------------------------------------------------------------------
+env_name: prod
+base_url: https://app.example.com
+db:
+  host: prod-db.example.com
+  port: 5432
+  name: app
+  user: readonly_monitor
+  password_env_var: APP_DB_PASSWORD
+app:
+  path: calc.exe
+  launch_timeout: 30
+log_level: WARNING
+retries: 3
+read_only: true

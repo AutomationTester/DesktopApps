@@ -1,0 +1,61 @@
+# ---------------------------------------------------------------------------
+# Command checks for examples/09_config_driven_runner.py
+#
+# Each entry is ONE test case for a CLI tool:
+#   name                    : readable test name
+#   command                 : string (split with shlex) or list
+#                             {python} is replaced with the current python.exe
+#   expected_returncode     : default 0
+#   expect_stdout_contains  : optional text that must appear in stdout
+#   expect_stderr_contains  : optional text that must appear in stderr
+#   timeout                 : seconds (default 30)
+#   os                      : any | windows | linux   (default any)
+#   tags                    : list, filter with --tag smoke
+#
+# NOTE: the 3 checks tagged demo_fail are DESIGNED to fail so trainees can
+# see how timeouts, missing tools and wrong output are reported.
+# ---------------------------------------------------------------------------
+settings:
+  default_timeout: 15
+  stop_on_first_failure: false
+
+checks:
+  - name: Python is installed
+    command: "{python} --version"
+    expect_stdout_contains: "Python 3"
+    tags: [smoke]
+
+  - name: PyYAML importable
+    command: ["{python}", "-c", "import yaml; print('yaml', yaml.__version__)"]
+    expect_stdout_contains: "yaml"
+    tags: [smoke]
+
+  - name: Tool reports a controlled failure
+    command: ["{python}", "-c", "import sys; sys.stderr.write('invalid license'); sys.exit(4)"]
+    expected_returncode: 4
+    expect_stderr_contains: "invalid license"
+    tags: [negative]
+
+  - name: List directory (Linux)
+    command: "ls -la"
+    os: linux
+    tags: [smoke]
+
+  - name: List directory (Windows)
+    command: "cmd /c dir"
+    os: windows
+    tags: [smoke]
+
+  - name: Hanging tool (DELIBERATE FAIL - shows timeout reporting)
+    command: ["{python}", "-c", "import time; time.sleep(5)"]
+    timeout: 1
+    tags: [demo_fail]
+
+  - name: Missing tool (DELIBERATE FAIL - shows not-found reporting)
+    command: "definitely_not_installed_tool --help"
+    tags: [demo_fail]
+
+  - name: Version output check (DELIBERATE FAIL - wrong expectation)
+    command: "{python} --version"
+    expect_stdout_contains: "Python 2"
+    tags: [demo_fail]

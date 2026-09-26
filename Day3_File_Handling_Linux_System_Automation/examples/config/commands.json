@@ -1,0 +1,8 @@
+{
+  "settings": {"default_timeout": 10, "stop_on_first_failure": false},
+  "checks": [
+    {"name": "Python version", "command": "{python} --version", "expect_stdout_contains": "Python", "tags": ["smoke"]},
+    {"name": "Exit code 0 from script", "command": ["{python}", "-c", "print('OK')"], "expect_stdout_contains": "OK", "tags": ["smoke"]},
+    {"name": "Expected exit code 2", "command": ["{python}", "-c", "import sys; sys.exit(2)"], "expected_returncode": 2, "tags": ["negative"]}
+  ]
+}

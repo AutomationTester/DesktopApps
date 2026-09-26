@@ -1,0 +1,70 @@
+# =====================================================================
+# 03_matrix_os_python.yml - MATRIX build: same tests, many OS / Python
+# ---------------------------------------------------------------------
+# SAMPLE ONLY. 2 OS x 2 Python versions = 4 parallel jobs.
+# Desktop (pywinauto) tests need a REAL Windows 10/11 desktop, so they
+# are placed in a separate job on a self-hosted Windows runner.
+# =====================================================================
+
+name: 03 Matrix OS x Python
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  cli-matrix:
+    name: CLI tests - ${{ matrix.os }} - py${{ matrix.python-version }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false                     # let other combos finish if one fails
+      matrix:
+        os: [ ubuntu-latest, windows-latest ]
+        python-version: [ "3.12", "3.13" ]
+    defaults:
+      run:
+        working-directory: automation_framework
+        shell: bash                        # same shell syntax on Linux AND Windows (Git Bash)
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+          cache-dependency-path: requirements.txt      # lives at the repo root
+      - run: pip install -r ../requirements.txt
+      - run: pytest -m cli --html=reports/cli_${{ matrix.os }}_${{ matrix.python-version }}.html --self-contained-html
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          # artifact names must be UNIQUE per matrix combination
+          name: cli-report-${{ matrix.os }}-py${{ matrix.python-version }}
+          path: automation_framework/reports/
+
+  desktop-windows:
+    # WHY NOT windows-latest?  GitHub-hosted Windows runners are Windows SERVER VMs:
+    #   - no Store Calculator / Windows 11 Notepad installed
+    #   - the agent runs as a service without an interactive, logged-in desktop
+    # So pywinauto desktop tests go to a SELF-HOSTED Windows 10/11 runner whose
+    # runner was started interactively (run.cmd) in a logged-in, unlocked session.
+    name: Desktop tests - self-hosted Windows
+    if: vars.DESKTOP_RUNNER_AVAILABLE == 'true'   # repo variable: turn the job on/off
+    runs-on: [ self-hosted, windows ]
+    needs: cli-matrix                      # run only after the CLI matrix succeeds
+    defaults:
+      run:
+        working-directory: automation_framework
+    steps:
+      - uses: actions/checkout@v4
+      # a self-hosted machine already has Python installed - no setup-python needed
+      - run: python -m pip install -r ../requirements.txt
+      - run: python -m pytest -m desktop --html=reports/desktop_report.html --self-contained-html
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: desktop-report
+          path: |
+            automation_framework/reports/
+            automation_framework/screenshots/
+            automation_framework/logs/
+          if-no-files-found: ignore

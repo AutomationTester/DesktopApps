@@ -1,0 +1,11 @@
+{
+  "suite": "Windows Calculator - basic arithmetic",
+  "tests": [
+    {"test_id": "CALC-J01", "num1": 25, "operator": "+", "num2": 17, "expected": "42", "description": "addition"},
+    {"test_id": "CALC-J02", "num1": 50, "operator": "-", "num2": 75, "expected": "-25", "description": "negative result"},
+    {"test_id": "CALC-J03", "num1": 6, "operator": "*", "num2": 7, "expected": "42", "description": "multiplication"},
+    {"test_id": "CALC-J04", "num1": 1, "operator": "/", "num2": 8, "expected": "0.125", "description": "fraction"},
+    {"test_id": "CALC-J05", "num1": 3, "operator": "/", "num2": 0, "expected": "Cannot divide by zero", "description": "error message"},
+    {"test_id": "CALC-J06", "num1": 999, "operator": "+", "num2": 1, "expected": "1000", "description": "carry over"}
+  ]
+}

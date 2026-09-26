@@ -1,0 +1,22 @@
+# Lab 1 - mini framework configuration.
+# Pick an environment with:  python run_demo.py --env qa   /   pytest --env qa   /   TEST_ENV=qa
+default_env: dev
+
+environments:
+  dev:
+    log_level: DEBUG          # level written to the per-run log file
+    keep_logs: 5              # log folder cleanup: keep newest N run logs
+    timeouts:
+      app_start: 5            # seconds to wait for the window to appear
+      element: 3              # seconds to wait for a control
+    retry:
+      times: 3
+      delay: 0.1
+    calculator:
+      window_title: Calculator
+      startup_delay: 0.5      # simulated app: seconds until the window is visible
+      flaky_click_rate: 0.15  # simulated app: chance that a click fails (to exercise retry)
+
+  # TODO (Lab 1, step 2): add a 'qa' environment with the SAME keys:
+  #   log_level INFO, keep_logs 10, app_start 10, element 5,
+  #   retry times 4 / delay 0.2, startup_delay 1.0, flaky_click_rate 0.0

@@ -1,0 +1,14 @@
+{
+  "name": "desktop-automation-course",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Node tooling for the course: Allure 3 report generator (no Java needed). Install with: npm install",
+  "scripts": {
+    "allure:generate": "cd automation_framework && allure generate allure-results",
+    "allure:open": "cd automation_framework && allure open",
+    "report:pdf": "cd automation_framework && python tools/allure_pdf_report.py"
+  },
+  "devDependencies": {
+    "allure": "^3.18.0"
+  }
+}

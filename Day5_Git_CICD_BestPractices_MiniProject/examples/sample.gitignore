@@ -1,0 +1,61 @@
+# =====================================================================
+# sample.gitignore - recommended .gitignore for a Python test
+# automation repository (desktop + CLI automation with pytest)
+#
+# Copy it to the ROOT of your repo and rename it to:  .gitignore
+# Rule of thumb: commit SOURCE, never commit OUTPUT or SECRETS.
+# =====================================================================
+
+# ---------- Test outputs (regenerated on every run) ----------
+reports/
+report*.html
+assets/                 # pytest-html CSS/JS folder (non self-contained mode)
+logs/
+*.log
+screenshots/
+*.png.tmp
+junit*.xml
+allure-results/
+allure-report/
+.coverage
+htmlcov/
+test_output/
+archives/
+
+# ---------- Python byte code / caches ----------
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# ---------- Virtual environments ----------
+.venv/
+venv/
+env/
+
+# ---------- Packaging ----------
+build/
+dist/
+*.egg-info/
+
+# ---------- Secrets & local configuration (NEVER commit) ----------
+.env
+.env.*
+!.env.example           # but DO commit a template with fake values
+*.pem
+*.key
+secrets.yaml
+config/local*.yaml
+
+# ---------- IDE / OS noise ----------
+.vscode/*
+!.vscode/settings.json  # shared settings are OK to commit
+.idea/
+*.swp
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# ---------- Practice sandboxes ----------
+sandbox_repo/

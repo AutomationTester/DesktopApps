@@ -1,0 +1,10 @@
+test_id,num1,operator,num2,expected,description
+CALC-001,7,+,8,15,simple addition
+CALC-002,100,-,58,42,subtraction
+CALC-003,12,*,12,144,multiplication
+CALC-004,9,/,4,2.25,division with decimal result
+CALC-005,0,+,0,0,zero plus zero
+CALC-006,5,-,9,-4,negative result
+CALC-007,8,/,0,Cannot divide by zero,divide by zero error message
+CALC-008,1234,*,10,12340,thousands separator in display
+CALC-009,2,+,2,5,DELIBERATELY WRONG expected value - should FAIL

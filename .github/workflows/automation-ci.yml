@@ -1,0 +1,112 @@
+# CI pipeline for automation_framework
+#   cli-tests     : every push / PR / night, on Linux AND Windows, Python 3.12 + 3.13
+#   reports       : pytest-html, Allure (allure-report/index.html) and PDF (reports/test_report.pdf) as artifacts
+#   desktop-tests : Calculator/Notepad tests. GitHub-hosted Windows runners are Windows *Server*
+#                   (no Store Calculator / new Notepad, no logged-in desktop), so this job runs on a
+#                   SELF-HOSTED Windows 10/11 runner with an interactive session. Enable it by creating
+#                   the repository variable DESKTOP_RUNNER_AVAILABLE = true.
+name: Automation CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    - cron: "30 20 * * *"        # every day 20:30 UTC (02:00 IST) - nightly regression
+  workflow_dispatch:              # "Run workflow" button in the Actions tab
+    inputs:
+      env:
+        description: "Environment from config.yaml"
+        default: qa
+        type: choice
+        options: [dev, qa]
+
+jobs:
+  cli-tests:
+    name: CLI tests (${{ matrix.os }}, py${{ matrix.python }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        python: ["3.12", "3.13"]
+    defaults:
+      run:
+        working-directory: automation_framework
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r ../requirements.txt
+
+      - uses: actions/setup-node@v4        # Allure 3 report generator runs on Node.js (no Java)
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: package-lock.json
+
+      - name: Install Allure CLI
+        working-directory: .
+        run: npm ci
+
+      - name: Run CLI tests
+        run: pytest -m cli --env ${{ inputs.env || 'qa' }} --html=reports/report.html --self-contained-html
+
+      - name: Build Allure report and PDF
+        if: always()              # build reports even when tests fail
+        run: |
+          npx allure generate allure-results
+          python tools/allure_pdf_report.py --title "CLI tests - ${{ matrix.os }} - Python ${{ matrix.python }}"
+
+      - name: Upload reports and logs
+        if: always()              # upload even when tests fail - that is when you need them most
+        uses: actions/upload-artifact@v4
+        with:
+          name: cli-report-${{ matrix.os }}-py${{ matrix.python }}
+          path: |
+            automation_framework/reports/
+            automation_framework/allure-report/
+            automation_framework/logs/
+
+  desktop-tests:
+    name: Desktop tests (self-hosted Windows)
+    if: vars.DESKTOP_RUNNER_AVAILABLE == 'true'
+    runs-on: [self-hosted, windows]
+    needs: cli-tests
+    defaults:
+      run:
+        working-directory: automation_framework
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: python -m pip install -r ../requirements.txt
+
+      - name: Install Allure CLI
+        working-directory: .
+        run: npm ci
+
+      - name: Run desktop tests
+        run: python -m pytest -m desktop --env ${{ inputs.env || 'qa' }} --html=reports/report.html --self-contained-html
+
+      - name: Build Allure report and PDF
+        if: always()
+        run: |
+          npx allure generate allure-results
+          python tools/allure_pdf_report.py --title "Desktop tests - self-hosted Windows"
+
+      - name: Upload reports, logs and screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: desktop-report
+          path: |
+            automation_framework/reports/
+            automation_framework/allure-report/
+            automation_framework/logs/
+            automation_framework/screenshots/

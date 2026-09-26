@@ -1,0 +1,52 @@
+# =====================================================================
+# 02_python_tests.yml - run a Python pytest suite on every push / PR
+# ---------------------------------------------------------------------
+# SAMPLE ONLY. Copy into .github/workflows/ of your own repo.
+# Repo layout (same as the course repo):
+#   requirements.txt              <- repo root
+#   automation_framework/pytest.ini, tests/, ...
+# =====================================================================
+
+name: 02 Python Tests (CLI)
+
+on:
+  push:
+    branches: [ main ]            # only pushes to main...
+  pull_request:
+    branches: [ main ]            # ...and PRs that target main
+
+jobs:
+  cli-tests:
+    runs-on: ubuntu-latest        # CLI tests need no desktop -> cheap Linux runner
+    timeout-minutes: 15           # never let a hung test burn minutes forever
+
+    defaults:
+      run:
+        working-directory: automation_framework   # every `run:` starts here
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip                                  # cache downloaded wheels
+          cache-dependency-path: requirements.txt      # lives at the repo root
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r ../requirements.txt
+
+      - name: Run CLI tests
+        run: pytest -m cli -v --html=reports/cli_report.html --self-contained-html
+
+      - name: Upload HTML report
+        if: always()                   # upload even when tests FAIL (that's when you need it!)
+        uses: actions/upload-artifact@v4
+        with:
+          name: cli-report
+          path: automation_framework/reports/
+          retention-days: 7

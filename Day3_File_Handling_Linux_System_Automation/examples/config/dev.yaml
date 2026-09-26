@@ -1,0 +1,18 @@
+# ------------------------------------------------------------------
+# DEV environment config  (used by examples/05_env_configs.py)
+# NEVER put real passwords/API keys in this file. Secrets come from
+# environment variables (see password_env_var below).
+# ------------------------------------------------------------------
+env_name: dev
+base_url: http://localhost:8080
+db:
+  host: localhost
+  port: 5432
+  name: app_dev
+  user: dev_user
+  password_env_var: APP_DB_PASSWORD   # name of the env var holding the secret
+app:
+  path: calc.exe
+  launch_timeout: 10
+log_level: DEBUG
+retries: 0

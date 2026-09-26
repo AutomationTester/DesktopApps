@@ -1,0 +1,8 @@
+case_id,a,op,b,expected
+add_positive,10,+,5,15
+add_negative,-3,+,-7,-10
+subtract,20,-,8,12
+multiply,6,*,7,42
+multiply_zero,999,*,0,0
+divide,9,/,2,4.5
+divide_decimal,1,/,4,0.25

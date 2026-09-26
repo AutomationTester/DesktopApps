@@ -1,0 +1,33 @@
+# =====================================================================
+# 01_hello_world.yml - the smallest useful GitHub Actions workflow
+# ---------------------------------------------------------------------
+# SAMPLE ONLY. To use it, copy it into  .github/workflows/  of YOUR repo.
+# GitHub only runs workflow files located in .github/workflows/.
+# =====================================================================
+
+name: 01 Hello World              # name shown in the "Actions" tab
+
+on:                               # EVENTS that trigger the workflow
+  push:                           # any push to any branch
+  workflow_dispatch:              # adds a manual "Run workflow" button
+
+jobs:                             # one or more JOBS (run in parallel by default)
+  say-hello:                      # job id (your choice, no spaces)
+    runs-on: ubuntu-latest        # RUNNER = the machine that executes the job
+    steps:                        # STEPS run one after another in the same runner
+      - name: Print a greeting
+        run: echo "Hello from GitHub Actions!"
+
+      - name: Show some built-in context values
+        run: |
+          echo "Repository : ${{ github.repository }}"
+          echo "Branch/ref : ${{ github.ref_name }}"
+          echo "Commit SHA : ${{ github.sha }}"
+          echo "Triggered by event: ${{ github.event_name }}"
+          echo "Runner OS  : ${{ runner.os }}"
+
+      - name: Check out the repository code   # an ACTION (reusable step)
+        uses: actions/checkout@v4
+
+      - name: List the files we got
+        run: ls -la

@@ -1,0 +1,17 @@
+# ------------------------------------------------------------------
+# QA environment config  (used by examples/05_env_configs.py)
+# Same keys as dev.yaml - only the VALUES differ per environment.
+# ------------------------------------------------------------------
+env_name: qa
+base_url: https://qa.example.internal
+db:
+  host: qa-db.example.internal
+  port: 5432
+  name: app_qa
+  user: qa_automation
+  password_env_var: APP_DB_PASSWORD
+app:
+  path: calc.exe
+  launch_timeout: 20
+log_level: INFO
+retries: 2

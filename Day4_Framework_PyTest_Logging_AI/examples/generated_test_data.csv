@@ -1,0 +1,28 @@
+field,value,expected_valid,technique
+age,17,False,BVA
+age,18,True,BVA
+age,19,True,BVA
+age,59,True,BVA
+age,60,True,BVA
+age,61,False,BVA
+age,35,True,ECP: valid middle value
+age,-5,False,ECP: negative
+age,150,False,ECP: far above max
+age,abc,False,ECP: non-numeric
+age,,False,ECP: empty
+username,OhbV,False,too short (min-1)
+username,rpoiV,True,exact min length
+username,gRV5IfLBcbfn,True,exact max length
+username,oGMbJmTPSIAoC,False,too long (max+1)
+username,user_01,False,contains underscore
+username,  ,False,whitespace only
+username,testeré,False,non-ASCII character
+salary,9999.99,False,BVA
+salary,10000.0,True,BVA
+salary,10000.01,True,BVA
+salary,99999.98,True,BVA
+salary,99999.99,True,BVA
+salary,100000.0,False,BVA
+salary,63033.91,True,random valid
+salary,82848.73,True,random valid
+salary,10584.89,True,random valid

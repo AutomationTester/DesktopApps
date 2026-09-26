@@ -1,0 +1,9 @@
+test_id,num1,operator,num2,expected,priority
+LAB-001,15,+,27,42,high
+LAB-002,300,-,1,299,high
+LAB-003,11,*,11,121,medium
+LAB-004,10,/,4,2.5,medium
+LAB-005,7,/,0,Cannot divide by zero,high
+LAB-006,4,%,2,2,low
+LAB-007,abc,+,1,1,low
+LAB-008,50,*,2,1000,medium
