@@ -506,6 +506,77 @@ except pyautogui.ImageNotFoundException:        # newer versions raise
 
 **Try it yourself:** capture the reference image, run example 06, then switch Windows to dark mode (Settings > Personalization > Colors) and run it again. Explain the result.
 
+### 8.5 Real mouse actions: pywinauto + pyautogui together
+
+Some things can only be tested with the real mouse:
+- the action is the feature: drag and drop, hover effects and tooltips, right-click menus, mouse-wheel scrolling
+- the app has no usable UI Automation tree: Electron apps, canvases, charts, games, Citrix/RDP sessions
+
+Each library has its own job:
+
+| pywinauto | pyautogui |
+|---|---|
+| finds the window and brings it to the front | moves the mouse, clicks, drags, scrolls |
+| tells you **where** the window is | presses keys and hotkeys |
+| checks focus before you type (`is_active()`) | |
+
+**Window-relative coordinates.** Never hard-code screen points. Add a fixed offset to the window's client-area origin:
+
+```python
+import win32gui
+from pywinauto import Desktop
+
+win = Desktop(backend="win32").window(title="Day2 Mouse Playground").wrapper_object()
+win.set_focus()
+x, y = win32gui.ClientToScreen(win.handle, (80, 230))   # offset inside the window
+```
+
+`ClientToScreen` skips the title bar and borders. pywinauto's `client_to_screen()` measures from the outer window edge, so its points land too high and too far left.
+
+```python
+pyautogui.moveTo(x, y, duration=0.5)            # hover (motion only)
+pyautogui.click(x, y); pyautogui.doubleClick(x, y)
+pyautogui.rightClick(x, y); pyautogui.press("down"); pyautogui.press("enter")  # context menu
+
+pyautogui.moveTo(sx, sy)                        # drag and drop
+pyautogui.dragTo(tx, ty, duration=1.0, button="left")   # duration > 0 !
+
+pyautogui.mouseDown(); time.sleep(0.2)          # step-by-step drag for picky apps
+pyautogui.moveTo(tx, ty, duration=0.5); pyautogui.mouseUp()
+
+pyautogui.scroll(-3 * 120)                      # Windows: 120 units = 1 wheel notch
+pyautogui.keyDown("shift"); pyautogui.press("1"); pyautogui.keyUp("shift")   # "!"
+```
+
+Full demo: `examples/12_mouse_keyboard_hybrid.py`. It drives `examples/apps/mouse_playground.py`, a harmless practice window that records every event in a JSON file. The script reads that file to check each action (the test oracle). Use `--where` to print live window-relative offsets while you hover, and measure targets in any app this way.
+
+**Common mistakes (section 8.5)**
+- `dragTo(x, y)` without `duration`: the mouse teleports and the app sees no movement between press and release.
+- `scroll(-5)`: on Windows this is 1/24 of a wheel notch and does nothing. Use multiples of 120.
+- Typing after a click without checking focus: the keys go to whatever window is active. Call `win.is_active()` first.
+- Forgetting `mouseUp()` / `keyUp()` after an exception: the button or Shift stays held down. Release them in `finally`.
+- Clicking context-menu items by coordinates: menus open in different places. Choose items with the arrow keys and Enter.
+
+### 8.6 Real Electron app: Notion desktop
+
+Notion, VS Code, Teams and Slack are **Electron** apps: a Chromium browser inside a window (class `Chrome_WidgetWin_1`). pywinauto finds the window easily. The page content is HTML, and its UIA tree is only partly usable or missing. The practical mix:
+
+| Need | Tool |
+|---|---|
+| Find the window, pick the right one among many `Notion.exe` processes | pywinauto (`class_name=`, `process_module()`) |
+| Know which page is open | pywinauto `window_text()`. Electron copies the page title into the window title |
+| Create pages, type text, slash commands, move blocks | pyautogui keyboard shortcuts (`Ctrl+N`, `/todo`, `Esc`, `Ctrl+Shift+Up`) |
+| Drag a block by its hover-only drag handle | pyautogui `mouseDown` → small moves → `mouseUp` |
+| Check the result | **clipboard**: select all blocks, `Ctrl+C`, read the text |
+
+Safety rules for an app full of real user data:
+- Work only on a **new page with a unique title**.
+- **Gate:** before typing anything, check that the window title shows a new, empty page. Stop if it doesn't.
+- Check the title again before deleting, so you only ever trash your own page.
+- Save the user's clipboard and restore it at the end.
+
+Full demo: `examples/13_notion_electron_hybrid.py` (needs Notion desktop, signed in). Start Notion with `--force-renderer-accessibility` so Chromium builds its UIA tree. If the tree is missing, the script moves the block with the keyboard instead of dragging it. Notion changes its UI often: `--inspect` writes the UIA tree to `notion_tree.txt` so you can update button names.
+
 ---
 
 ## 9. Handling focus, windows and dialogs
@@ -764,7 +835,9 @@ pyautogui.FAILSAFE = True; pyautogui.PAUSE = 0.3
 pyautogui.size(); pyautogui.position(); pyautogui.onScreen(x, y)
 pyautogui.moveTo(x, y, duration=0.5); pyautogui.moveRel(dx, dy)
 pyautogui.click(x, y); pyautogui.doubleClick(); pyautogui.rightClick()
-pyautogui.dragTo(x, y, duration=0.5); pyautogui.scroll(-300)
+pyautogui.dragTo(x, y, duration=0.5); pyautogui.scroll(-300)   # Windows: 120 = 1 notch
+pyautogui.mouseDown(); pyautogui.moveTo(x, y, duration=0.5); pyautogui.mouseUp()
+x, y = win32gui.ClientToScreen(win.handle, (dx, dy))  # window offset -> screen point
 
 pyautogui.write("text", interval=0.05); pyautogui.press("enter")
 pyautogui.press("tab", presses=3); pyautogui.hotkey("ctrl", "shift", "s")

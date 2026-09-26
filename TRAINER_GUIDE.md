@@ -43,12 +43,14 @@ Detailed minute-by-minute agendas are on slide 2 of each deck.
 - [ ] `python run_tests.py` asks which application to test. Press Enter to test all
 - [ ] `python run_tests.py` builds `allure-report/index.html` and `reports/test_report.pdf`. Open both once before class
 - [ ] Day 2 `examples\02_calculator_pywinauto.py` and `03_notepad_safe_automation.py` run with PASS
+- [ ] Day 2 `examples\12_mouse_keyboard_hybrid.py` prints **8/8 checks passed**. Keep your hands off the mouse while it runs
+- [ ] Optional: Notion desktop installed and signed in, and Day 2 `examples\13_notion_electron_hybrid.py` rehearsed (Notion changes its UI; fix names with `--inspect`)
 - [ ] Day 2 `examples\06_image_based_click.py --capture`, then run it without the flag. The reference image depends on your **display scaling and theme**, so capture it on the presenting machine
 - [ ] Accessibility Insights for Windows installed (object inspection demo, Day 2)
 - [ ] Trainees have GitHub accounts (Day 5)
 - [ ] Projector: keep display scaling unchanged between capturing images and presenting
 
-**Verified environment:** Windows 11 (build 26200), Python 3.14, pywinauto 0.6.9, pytest 9.1, pytest-html 4.2. Every script in `examples/` and `hands_on/solutions/` was run, including the GUI scripts driving the real Calculator and Notepad.
+**Verified environment:** Windows 11 (build 26200), Python 3.14, pywinauto 0.6.9, pytest 9.1, pytest-html 4.2. Every script in `examples/` and `hands_on/solutions/` was run, including the GUI scripts driving the real Calculator and Notepad. Exception: Day 2 `13_notion_electron_hybrid.py` has not been run against Notion yet (Notion was not installed). Rehearse it before class.
 
 ---
 
@@ -90,7 +92,7 @@ Every bullet of the official course outline, and where it is taught.
 | Desktop UI elements and states | `04_print_control_identifiers.py`, `07_handle_dialogs_focus.py` | Lab 0 |
 | Desktop automation challenges | reading + slides (Notepad tab restore, duplicate Calculator windows) | Lab 2 |
 | Element-based vs image-based automation | `02_calculator_pywinauto.py` vs `06_image_based_click.py` | - |
-| Mouse and keyboard automation | `05_mouse_keyboard_pyautogui.py` | - |
+| Mouse and keyboard automation | `05_mouse_keyboard_pyautogui.py`, `12_mouse_keyboard_hybrid.py` (click, double/right-click, drag and drop, hover, scroll, hotkeys on `apps/mouse_playground.py`), `13_notion_electron_hybrid.py` (real Electron app, needs Notion signed in) | Lab 1 stretch goal |
 | Handling focus, windows, dialogs | `07_handle_dialogs_focus.py` | Lab 2 |
 | Introduction to CLI tools and automation use cases | slides, `10_subprocess_demo.py` | - |
 | Running Python scripts from command line | `08_sys_argv_demo.py` | Lab 4 |

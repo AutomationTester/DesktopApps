@@ -743,6 +743,59 @@ Common question: "Can pyautogui read text?" - No; you'd need OCR (pytesseract), 
 
 ---
 
+# Hybrid: pywinauto finds, pyautogui acts
+
+```python
+win = Desktop(backend="win32").window(title="Day2 Mouse Playground").wrapper_object()
+win.set_focus()
+sx, sy = win32gui.ClientToScreen(win.handle, (80, 230))    # source, window-relative
+tx, ty = win32gui.ClientToScreen(win.handle, (575, 230))   # target
+
+pyautogui.moveTo(sx, sy, duration=0.3)
+pyautogui.dragTo(tx, ty, duration=1.0)      # drag and drop
+pyautogui.rightClick(x, y); pyautogui.press("down"); pyautogui.press("enter")
+pyautogui.scroll(-3 * 120)                  # Windows: 120 = one wheel notch
+```
+
+- Use this for drag and drop, hover, context menus, scrolling, and apps with no UIA tree (Electron, canvas, Citrix)
+- Use **window-relative** offsets, never fixed screen points
+- Check the result with an **oracle** (app state, file, pywinauto), not with your eyes
+
+`examples/12_mouse_keyboard_hybrid.py` drives `examples/apps/mouse_playground.py`
+
+<!-- Trainer notes:
+Run apps/mouse_playground.py by hand first so trainees see every target. Then run example 12 (8 checks, about 20 s, hands off the mouse).
+Run it with --where and hover the targets to show how offsets are measured in any app.
+Gotchas to point out in the code: dragTo needs duration > 0; scroll(-5) does nothing on Windows (raw units, 120 per notch); release mouseUp()/keyUp() in finally; is_active() check before typing.
+Why win32gui.ClientToScreen and not pywinauto's client_to_screen(): the latter adds the offset to the OUTER window rectangle (title bar included).
+-->
+
+---
+
+# Real Electron app: Notion desktop
+
+| Step | Tool |
+|---|---|
+| Find the window (`Chrome_WidgetWin_1`, owned by `Notion.exe`) | pywinauto |
+| Which page is open? `window_text()` = page title | pywinauto |
+| `Ctrl+N`, type, `/todo`, `Ctrl+Shift+Up` | pyautogui keys |
+| Hover a block → drag handle → drag and drop | pyautogui mouse |
+| Verify: select all, `Ctrl+C`, read the **clipboard** | pywin32 |
+
+- **Safety gate:** check that the window title shows a *new empty page* before typing anything
+- Trash only a page whose title is **ours**; restore the user's clipboard
+
+`examples/13_notion_electron_hybrid.py` (`--inspect` dumps the UIA tree, `--keep` keeps the page)
+
+<!-- Trainer notes:
+Needs Notion desktop installed and signed in on the presenting machine (a free account is enough). Rehearse it: Notion changes its UI often.
+Show example 01 output first: Notion, VS Code and Teams all have class Chrome_WidgetWin_1, which is how you spot an Electron app.
+Point out the fallback: if Chromium exposes no page elements there are no positions for a drag, so the script moves the block with Ctrl+Shift+Up. Real frameworks need a plan B like this for web-based desktop apps.
+If a step fails, run --inspect and search notion_tree.txt for the "..." button and the "Move to trash" item, then update MORE_BUTTON_RE / TRASH_ITEM_RE.
+-->
+
+---
+
 # Handling focus
 
 - Keyboard input goes **only** to the focused window

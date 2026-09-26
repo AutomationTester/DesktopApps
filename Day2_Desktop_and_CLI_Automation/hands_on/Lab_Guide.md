@@ -90,6 +90,7 @@ Exit code `0`. Change one expected value to see a FAIL and exit code `1`.
 **Stretch goals**
 - Turn `BUTTON_IDS` + functions into a `CalculatorPage` class (page-object style - Day 1 OOP!).
 - Image-based: run `python ..\..\examples\06_image_based_click.py --capture`, then click `7` via `pyautogui.locateOnScreen(..., confidence=0.8)` and verify the display with pywinauto (hybrid approach).
+- Real mouse actions: run `python ..\..\examples\12_mouse_keyboard_hybrid.py`. Then write your own test that drags the blue square into the drop zone **and** double-clicks the "Double-click me" label, and checks both in the state file. Measure any new offsets with `--where`.
 - Read the test cases from a CSV file.
 - Test chained operations (`2+3*4=`) - what does Standard mode return? (Standard mode evaluates left to right: `20`.)
 

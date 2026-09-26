@@ -6,6 +6,9 @@ pillow>=10.0
 # Reporting: Allure results + PDF report (tools/allure_pdf_report.py)
 allure-pytest>=2.13
 reportlab>=4.0
+# Export course Markdown to PDF (tools/export_materials.py)
+markdown-it-py>=3.0
+mdit-py-plugins>=0.4
 # Desktop automation - Windows only (skipped automatically on Linux/macOS)
 pywinauto>=0.6.8; sys_platform == "win32"
 pyautogui>=0.9.54; sys_platform == "win32"
