@@ -28,3 +28,12 @@ Thumbs.db
 # Secrets - never commit
 .env
 *.pem
+
+# Client Trainer Kit (Cognixia template, logos, invoice) - kept local, not published
+Trainer Kit 2024/
+
+# Local export staging / backups and PowerPoint autosave files
+exports_staging/
+exports_TrainerKit2024_staging/
+exports_backup_*/
+*\[Autosaved\]*

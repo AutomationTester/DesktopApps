@@ -2,6 +2,13 @@
 marp: true
 theme: default
 paginate: true
+style: |
+  /* Denser layouts for content-heavy slides: add "_class: compact" or "_class: tight" */
+  section.compact { font-size: 24px; padding: 48px 64px 40px; }
+  section.compact h1 { margin-top: 0; margin-bottom: 0.3em; }
+  section.tight { font-size: 20px; padding: 36px 56px 32px; }
+  section.tight h1 { margin-top: 0; margin-bottom: 0.25em; }
+  section.tight pre { margin: 0.4em 0; }
 ---
 
 # Day 5
@@ -15,6 +22,7 @@ Python Desktop Application Automation Testing - 5-Day Program
 
 ---
 
+<!-- _class: compact -->
 # Day 5 Agenda (09:00 - 17:00)
 
 | Time | Session |
@@ -748,6 +756,7 @@ Download: run page -> **Artifacts** section -> zip.
 
 ---
 
+<!-- _class: compact -->
 # Headless & scheduled execution
 
 **Scheduled**: `schedule: - cron: "30 20 * * *"`
@@ -1172,7 +1181,7 @@ Demos: `02_hardcoded_paths_*.py`, `05_cross_platform_commands.py`
 *Thank you - now go automate something!*
 
 Resources in this folder:
-- `02_Reading_Material.md` - handbook, cheat sheets, interview Q&A
+- `02_Reading_Material.md` - handbook, cheat sheets, questions & answers
 - `03_Quiz.md` - self-check
 - `examples/` - Git script, workflow samples, best-practice demos
 - `hands_on/` - labs, mini project starter & solution

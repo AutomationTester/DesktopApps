@@ -41,7 +41,7 @@ Python Desktop Application Automation Testing - Trainee Handbook
 5. [Mini project overview](#5-mini-project-overview)
 6. [Best-practices checklist](#6-best-practices-checklist)
 7. [Common mistakes (all topics)](#7-common-mistakes-all-topics)
-8. [Interview questions and answers](#8-interview-questions-and-answers)
+8. [Questions and answers](#8-questions-and-answers)
 9. [Day 5 summary](#9-day-5-summary)
 
 ---
@@ -995,7 +995,7 @@ Use this before every Pull Request.
 
 ---
 
-## 8. Interview questions and answers
+## 8. Questions and answers
 
 **Q1. What is the difference between Git and GitHub?**
 Git is a distributed version control tool that runs locally. GitHub is a hosting platform for

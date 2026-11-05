@@ -20,7 +20,7 @@
 9. [Handling focus, windows and dialogs](#9-handling-focus-windows-and-dialogs)
 10. [Command-line automation](#10-command-line-automation)
 11. [Cheat-sheets: pywinauto, pyautogui, argparse](#11-cheat-sheets)
-12. [Interview questions and answers](#12-interview-questions-and-answers)
+12. [Questions and answers](#12-questions-and-answers)
 13. [Day 2 summary](#13-day-2-summary)
 
 All example scripts live in `examples/`; labs in `hands_on/`.
@@ -874,7 +874,7 @@ p.error("custom message")             # prints usage, exits with code 2
 
 ---
 
-## 12. Interview questions and answers
+## 12. Questions and answers
 
 **Q1. What is the difference between the `win32` and `uia` backends in pywinauto?**
 `win32` uses the Win32 API (window handles and messages) and sees only classic HWND controls (Win32, MFC, WinForms, VB6). `uia` uses Microsoft UI Automation and also supports WPF, UWP/WinUI Store apps and Electron. `uia` is the default choice; `win32` can be faster for legacy apps.

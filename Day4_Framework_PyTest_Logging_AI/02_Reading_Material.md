@@ -20,7 +20,7 @@
 11. [AI basics for automation](#11-ai-basics-for-automation)
 12. [Common mistakes](#12-common-mistakes)
 13. [Day 4 summary](#13-day-4-summary)
-14. [Interview questions and answers](#14-interview-questions-and-answers)
+14. [Questions and answers](#14-questions-and-answers)
 
 Files referenced in this handbook:
 
@@ -1019,7 +1019,7 @@ AI can propose boundary values, invalid formats, unicode, very long strings and 
 
 ---
 
-## 14. Interview questions and answers
+## 14. Questions and answers
 
 **Q1. What is a test automation framework, and why use one instead of scripts?**
 A framework is a set of conventions and reusable components: a runner, folder structure, helpers, configuration, logging and reporting. It makes tests easy to write, run and maintain. It removes duplicated code, keeps locators in one place, allows switching environments without code changes, and gives consistent evidence on failures.

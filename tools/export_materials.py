@@ -6,6 +6,11 @@ Export the course Markdown files (Day1 .. Day5) to PPTX / PDF.
     Slide decks  (front matter "marp: true")  -> .pptx + .pdf    via Marp CLI
     Documents    (handbooks, quizzes, labs)   -> .pdf (A4)       via Edge/Chrome
 
+Slide decks are first passed through slide_fit.py: slides too tall for the
+1280 x 720 canvas (Marp would clip them) get the deck's "compact" class or
+are split into "(cont.)" slides, and the result is validated (nothing
+overflows, no word of the source is lost) before Marp exports it.
+
 Output goes to exports/, mirroring the Day folder structure:
     exports/Day1_.../01_Presentation.pptx
     exports/Day1_.../01_Presentation.pdf
@@ -20,6 +25,7 @@ REQUIREMENTS
 HOW TO RUN (from the repository root)
     python tools/export_materials.py              -> export everything
     python tools/export_materials.py Day2         -> only paths containing "Day2"
+    python tools/export_materials.py --out DIR    -> write to DIR instead of exports/
 """
 
 import html
@@ -37,9 +43,12 @@ from pygments.formatters import HtmlFormatter
 from pygments.lexers import get_lexer_by_name
 from pygments.util import ClassNotFound
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import slide_fit  # noqa: E402
+
 ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "exports"
-MARP = ["@marp-team/marp-cli@4"]
+MARP = slide_fit.MARP
 
 BROWSERS = [
     Path(r"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe"),
@@ -90,25 +99,37 @@ def is_deck(md: Path) -> bool:
     return head.startswith("---") and "marp: true" in head
 
 
-def run(cmd: list[str]) -> bool:
-    result = subprocess.run(cmd, capture_output=True, text=True, encoding="utf-8",
-                            errors="replace")
+def run(cmd: list[str], env: dict | None = None) -> bool:
+    result = subprocess.run(cmd, stdin=subprocess.DEVNULL, capture_output=True, text=True,
+                            encoding="utf-8", errors="replace", env=env)
     if result.returncode != 0:
         print("    ERROR:", (result.stderr or result.stdout).strip()[-800:])
     return result.returncode == 0
 
 
 # ---- slide decks -------------------------------------------------------------
-def export_deck(md: Path, out_dir: Path) -> list[Path]:
+def export_deck(md: Path, out_dir: Path, tmp: Path) -> list[Path]:
     npx = shutil.which("npx") or shutil.which("npx.cmd")
     if npx is None:
         raise SystemExit("npx not found - install Node.js LTS")
+    # make every slide fit (Marp clips overflowing slides silently)
+    work = tmp / f"fit_{md.parent.name}"
+    source = md.read_text(encoding="utf-8")
+    fitted = slide_fit.fit_markdown(source, work)
+    for change in fitted.changes:
+        print(f"      fit: {change}")
+    problems = slide_fit.validate(source, fitted, work)
+    if problems:
+        print("    ERROR: fitted deck failed validation:", *problems, sep="\n      ")
+        return []
+    deck = work / md.name             # decks use no relative images/links
+    deck.write_text(fitted.text, encoding="utf-8")
     made = []
     for fmt, extra in (("pptx", []), ("pdf", ["--pdf-notes", "--pdf-outlines"])):
         target = out_dir / f"{md.stem}.{fmt}"
-        cmd = [npx, "--yes", *MARP, str(md), f"--{fmt}", *extra,
+        cmd = [npx, "--yes", *MARP, str(deck), f"--{fmt}", *extra,
                "--allow-local-files", "-o", str(target)]
-        if run(cmd):
+        if run(cmd, env=slide_fit.marp_env()):
             made.append(target)
     return made
 
@@ -162,7 +183,12 @@ def wait_for_file(path: Path, timeout: float = 90) -> bool:
 
 
 def main() -> int:
+    global OUT
     filters = sys.argv[1:]
+    if "--out" in filters:
+        i = filters.index("--out")
+        OUT = Path(filters[i + 1]).resolve()
+        del filters[i:i + 2]
     files = sorted(p for p in ROOT.glob("Day*/**/*.md")
                    if not filters or any(f in str(p) for f in filters))
     if not files:
@@ -181,10 +207,10 @@ def main() -> int:
             deck = is_deck(md)
             print(f"{'DECK' if deck else 'DOC '}  {rel}")
             expected = 2 if deck else 1
-            made = (export_deck(md, out_dir) if deck
+            made = (export_deck(md, out_dir, tmp) if deck
                     else export_document(md, out_dir, browser, tmp))
             for path in made:
-                print(f"      -> {path.relative_to(ROOT)} ({path.stat().st_size // 1024} KB)")
+                print(f"      -> {path.relative_to(OUT)} ({path.stat().st_size // 1024} KB)")
             failures += expected - len(made)
     print(f"\nDone: {len(files)} Markdown files, {failures} failed exports. Output: {OUT}")
     return 0 if failures == 0 else 1

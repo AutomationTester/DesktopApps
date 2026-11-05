@@ -2,6 +2,13 @@
 marp: true
 theme: default
 paginate: true
+style: |
+  /* Denser layouts for content-heavy slides: add "_class: compact" or "_class: tight" */
+  section.compact { font-size: 24px; padding: 48px 64px 40px; }
+  section.compact h1 { margin-top: 0; margin-bottom: 0.3em; }
+  section.tight { font-size: 20px; padding: 36px 56px 32px; }
+  section.tight h1 { margin-top: 0; margin-bottom: 0.25em; }
+  section.tight pre { margin: 0.4em 0; }
 ---
 
 # Day 2
@@ -22,6 +29,7 @@ Ask: "Who has ever repeated the same manual test on a desktop app 20 times?" - t
 
 ---
 
+<!-- _class: compact -->
 # Agenda (8 hours)
 
 | Time          | Topic                                                        |
@@ -186,6 +194,7 @@ Common question: "Does pyautogui send messages?" - It injects real OS input (Sen
 
 ---
 
+<!-- _class: compact -->
 # The UI Automation (UIA) tree
 
 - Microsoft **UI Automation** = accessibility API built into Windows
@@ -210,6 +219,7 @@ Patterns explain pywinauto methods: .invoke() uses Invoke pattern, .toggle() Tog
 
 ---
 
+<!-- _class: compact -->
 # Types of desktop applications
 
 | Type | Technology | Examples | pywinauto backend |
@@ -224,7 +234,7 @@ Patterns explain pywinauto methods: .invoke() uses Invoke pattern, .toggle() Tog
 <!-- Trainer notes:
 Win11 surprise: Calculator and Notepad are Store (UWP/WinUI) apps now - so we use backend="uia" for both.
 Electron: UIA tree is exposed by Chromium; often usable, but deep content may need Playwright/Selenium via remote debugging (mention only).
-Java apps: need Java Access Bridge enabled - otherwise the tree is empty. Good interview point.
+Java apps: need Java Access Bridge enabled - otherwise the tree is empty. Worth stressing.
 -->
 
 ---
@@ -247,6 +257,7 @@ Question: "Why not always win32?" - win32 only sees real HWND controls; WPF/UWP 
 
 ---
 
+<!-- _class: compact -->
 # pywinauto backends: win32 vs uia
 
 ```python
@@ -274,6 +285,7 @@ Rule: one Application/Desktop object = one backend. You cannot mix inside the sa
 
 ---
 
+<!-- _class: compact -->
 # Desktop UI elements
 
 | Element | ControlType | Typical actions |
@@ -296,6 +308,7 @@ Each row corresponds to a pywinauto wrapper class with specific methods.
 
 ---
 
+<!-- _class: compact -->
 # Element states - what testers verify
 
 | State | Meaning | pywinauto |
@@ -456,6 +469,7 @@ Both are valid - choose per situation (next slide).
 
 ---
 
+<!-- _class: compact -->
 # Element-based vs image-based
 
 | Aspect | Element-based (pywinauto) | Image-based (pyautogui) |
@@ -472,7 +486,7 @@ Both are valid - choose per situation (next slide).
 **Strategy:** element-based first, image-based as fallback, **hybrid** when needed.
 
 <!-- Trainer notes:
-Interview favourite. Stress "can read state": image-based can click but cannot easily VERIFY - and verification is the whole point of testing.
+Key point. Stress "can read state": image-based can click but cannot easily VERIFY - and verification is the whole point of testing.
 Hybrid: find/click with image, verify with element (example 06 does exactly this).
 -->
 
@@ -550,6 +564,7 @@ Demo the ambiguous error: win.child_window(control_type="Button").invoke() on Ca
 
 ---
 
+<!-- _class: compact -->
 # Actions and reading values
 
 | Goal | Method | Notes |
@@ -686,6 +701,7 @@ DPI note: with 125/150 % scaling, coordinates are physical pixels; pyautogui and
 
 ---
 
+<!-- _class: compact -->
 # Keyboard automation
 
 ```python
@@ -772,6 +788,7 @@ Why win32gui.ClientToScreen and not pywinauto's client_to_screen(): the latter a
 
 ---
 
+<!-- _class: compact -->
 # Real Electron app: Notion desktop
 
 | Step | Tool |
@@ -792,6 +809,23 @@ Needs Notion desktop installed and signed in on the presenting machine (a free a
 Show example 01 output first: Notion, VS Code and Teams all have class Chrome_WidgetWin_1, which is how you spot an Electron app.
 Point out the fallback: if Chromium exposes no page elements there are no positions for a drag, so the script moves the block with Ctrl+Shift+Up. Real frameworks need a plan B like this for web-based desktop apps.
 If a step fails, run --inspect and search notion_tree.txt for the "..." button and the "Move to trash" item, then update MORE_BUTTON_RE / TRASH_ITEM_RE.
+-->
+
+---
+
+# Lab 1: Automating Calculator (45 min)
+
+`hands_on/Lab_Guide.md` - Lab 1, starter: `hands_on/starter/lab1_calculator_test.py`
+
+- Map keys to AutomationIds
+- Implement `open_calculator`, `click_button`, `get_display`, `calculate`
+- Verify 5+ operations; print PASS/FAIL; exit code 0/1
+
+Stretch: `calc_seven.png` image-based click; read the History panel
+
+<!-- Trainer notes:
+Walk around. Typical problems: forgetting control_type -> ambiguous; using Application().start; not stripping "Display is"; Calculator in Scientific mode (auto_ids are the same, so fine) or Programmer mode (different).
+Solution: hands_on/solutions/lab1_calculator_test.py
 -->
 
 ---
@@ -821,6 +855,7 @@ Mention: GUI tests need a dedicated machine/VM or an unlocked session.
 
 ---
 
+<!-- _class: compact -->
 # Handling windows & waits
 
 ```python
@@ -891,23 +926,6 @@ finally:
 
 <!-- Trainer notes:
 Connect back to Day 1 try/finally. Next days will use pytest fixtures for set-up/tear-down.
--->
-
----
-
-# Lab 1: Automating Calculator (45 min)
-
-`hands_on/Lab_Guide.md` - Lab 1, starter: `hands_on/starter/lab1_calculator_test.py`
-
-- Map keys to AutomationIds
-- Implement `open_calculator`, `click_button`, `get_display`, `calculate`
-- Verify 5+ operations; print PASS/FAIL; exit code 0/1
-
-Stretch: `calc_seven.png` image-based click; read the History panel
-
-<!-- Trainer notes:
-Walk around. Typical problems: forgetting control_type -> ambiguous; using Application().start; not stripping "Display is"; Calculator in Scientific mode (auto_ids are the same, so fine) or Programmer mode (different).
-Solution: hands_on/solutions/lab1_calculator_test.py
 -->
 
 ---
@@ -985,6 +1003,7 @@ Explain __name__ == "__main__" with a quick demo: import the module vs run it.
 
 ---
 
+<!-- _class: compact -->
 # Exit codes = PASS/FAIL for machines
 
 ```python
@@ -1088,6 +1107,7 @@ Dashes: --min-free-gb becomes args.min_free_gb.
 
 ---
 
+<!-- _class: compact -->
 # argparse features testers use most
 
 | Need | Code |
@@ -1332,7 +1352,7 @@ Homework: read 02_Reading_Material.md sections 6-9, finish stretch goals.
 
 ---
 
-# Common interview questions (preview)
+# Review questions (preview)
 
 - Difference between `win32` and `uia` backends?
 - Element-based vs image-based - when would you use each?
@@ -1342,7 +1362,7 @@ Homework: read 02_Reading_Material.md sections 6-9, finish stretch goals.
 - `subprocess.run` vs `Popen` vs `os.system`?
 - `sys.argv` vs `argparse`?
 
-Full list with answers: `02_Reading_Material.md` section 12
+Full list with answers: `02_Reading_Material.md` section 12 (Questions and answers)
 
 <!-- Trainer notes:
 Pick 2-3 and ask random trainees - quick oral practice.

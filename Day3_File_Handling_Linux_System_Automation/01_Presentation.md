@@ -2,6 +2,13 @@
 marp: true
 theme: default
 paginate: true
+style: |
+  /* Denser layouts for content-heavy slides: add "_class: compact" or "_class: tight" */
+  section.compact { font-size: 24px; padding: 48px 64px 40px; }
+  section.compact h1 { margin-top: 0; margin-bottom: 0.3em; }
+  section.tight { font-size: 20px; padding: 36px 56px 32px; }
+  section.tight h1 { margin-top: 0; margin-bottom: 0.25em; }
+  section.tight pre { margin: 0.4em 0; }
 ---
 
 # Day 3
@@ -378,7 +385,7 @@ empty:             # -> None
 | Edited by | BAs in Excel | tools / devs | engineers |
 | Python | `csv` (built-in) | `json` (built-in) | `yaml` (pip install pyyaml) |
 
-<!-- Trainer notes: Interview favourite: "When would you choose YAML over JSON?" - human-edited config with comments; JSON for machine-to-machine data. -->
+<!-- Trainer notes: Common question: "When would you choose YAML over JSON?" - human-edited config with comments; JSON for machine-to-machine data. -->
 
 ---
 
@@ -736,6 +743,7 @@ find . -name "*.py" -exec grep -l "pywinauto" {} \;
 
 ---
 
+<!-- _class: compact -->
 ## Shell command cheat-sheet
 
 | Command | Purpose | Windows cmd equivalent |
@@ -810,6 +818,7 @@ drwxr-xr-x  2 tester qa 4096 Sep 26 10:00 logs
 
 ---
 
+<!-- _class: compact -->
 ## Octal permissions
 
 | rwx | Binary | Octal |
@@ -993,6 +1002,7 @@ subprocess.run("ls *.log | wc -l", shell=True)          # pipes/wildcards
 
 ---
 
+<!-- _class: compact -->
 ## Cross-platform considerations
 
 ```python
@@ -1268,6 +1278,7 @@ Env overrides `LAB_RETRIES`, secret `LAB_API_TOKEN` (masked)
 
 ---
 
+<!-- _class: compact -->
 ## Recap
 
 | Topic | Key takeaway |
@@ -1291,7 +1302,7 @@ Env overrides `LAB_RETRIES`, secret `LAB_API_TOKEN` (masked)
 - Finish any open lab; compare with `hands_on/solutions/`
 - Lab 7: create a venv + `requirements.txt` for your lab folder
 - Lab 8 (mini project): YAML-configured suite runner
-- Read `02_Reading_Material.md` sections 9-12 and the interview questions
+- Read `02_Reading_Material.md` sections 9-12 and the questions and answers (section 19)
 - Take the quiz `03_Quiz.md`
 
 <!-- Trainer notes: Day 4 builds on the data-driven design (pytest parametrize, fixtures reading configs, reports). Encourage trainees to bring questions from the reading material. -->

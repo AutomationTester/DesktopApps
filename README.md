@@ -44,7 +44,7 @@ Every **DayN** folder follows the same layout:
 | Item | What it is | Audience |
 |---|---|---|
 | `01_Presentation.md` | Slide deck (Marp format) with trainer notes on every slide | Trainer (presenting) |
-| `02_Reading_Material.md` | Handbook: explanations, examples, common mistakes, cheat sheets, interview Q&A | Trainees |
+| `02_Reading_Material.md` | Handbook: explanations, examples, common mistakes, cheat sheets, questions & answers | Trainees |
 | `03_Quiz.md` | 20 MCQs + answer key with explanations | Trainees / assessment |
 | `examples/` | Numbered, runnable demo scripts used in the slides | Trainer demos + trainees |
 | `hands_on/Lab_Guide.md` | Step-by-step labs: objective, time, tasks, expected output, hints, stretch goals | Trainees |

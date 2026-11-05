@@ -2,6 +2,13 @@
 marp: true
 theme: default
 paginate: true
+style: |
+  /* Denser layouts for content-heavy slides: add "_class: compact" or "_class: tight" */
+  section.compact { font-size: 24px; padding: 48px 64px 40px; }
+  section.compact h1 { margin-top: 0; margin-bottom: 0.3em; }
+  section.tight { font-size: 20px; padding: 36px 56px 32px; }
+  section.tight h1 { margin-top: 0; margin-bottom: 0.25em; }
+  section.tight pre { margin: 0.4em 0; }
 ---
 
 # Python Desktop Application Automation Testing
@@ -14,6 +21,7 @@ From manual tester to automation engineer - step 1
 
 ---
 
+<!-- _class: compact -->
 # Day 1 Agenda (09:00 - 17:00)
 
 | Time | Session |
@@ -967,7 +975,7 @@ Method: **run -> read the last line -> fix one -> run again**
 
 - Finish Labs 1-3; try Labs 4 and 5 (extra practice)
 - Take the Day 1 quiz: `03_Quiz.md`
-- Read `02_Reading_Material.md` (including the interview questions)
+- Read `02_Reading_Material.md` (including the questions and answers)
 - Check your setup: `pip show pywinauto pyautogui`
 
 **Day 2:** automating real Windows desktop applications

@@ -40,7 +40,7 @@
 **Part D - Wrap-up**
 
 21. [Hands-on Summary](#21-hands-on-summary)
-22. [Interview Questions and Answers](#22-interview-questions-and-answers)
+22. [Questions and answers](#22-questions-and-answers)
 23. [Quick Reference Card](#23-quick-reference-card)
 
 ---
@@ -1433,7 +1433,7 @@ All instructions are in `hands_on/Lab_Guide.md`.
 
 ---
 
-## 22. Questions and Answers
+## 22. Questions and answers
 
 **Q1. Why is Python popular for test automation?**
 It is easy to read and learn, and it needs less code than many other languages. It also has strong libraries for desktop automation (pywinauto, pyautogui), web (Selenium, Playwright), API (requests) and test frameworks (pytest), and it has a large community.

@@ -2,6 +2,13 @@
 marp: true
 theme: default
 paginate: true
+style: |
+  /* Denser layouts for content-heavy slides: add "_class: compact" or "_class: tight" */
+  section.compact { font-size: 24px; padding: 48px 64px 40px; }
+  section.compact h1 { margin-top: 0; margin-bottom: 0.3em; }
+  section.tight { font-size: 20px; padding: 36px 56px 32px; }
+  section.tight h1 { margin-top: 0; margin-bottom: 0.25em; }
+  section.tight pre { margin: 0.4em 0; }
 ---
 
 # Day 4
@@ -130,6 +137,7 @@ Rule: **a layer only calls the layers below it.**
 
 ---
 
+<!-- _class: compact -->
 ## Folder responsibilities
 
 | Folder | Responsibility |
@@ -877,6 +885,7 @@ pytest -m "desktop or cli"
 
 ---
 
+<!-- _class: compact -->
 ## Useful pytest command line options
 
 | Option | Meaning |

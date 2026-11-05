@@ -28,7 +28,7 @@ Companion files: `examples/` (runnable demos), `hands_on/Lab_Guide.md` (labs), `
 16. [Configuration-driven execution using JSON/YAML](#16-configuration-driven-execution-using-jsonyaml)
 17. [Automating system-level tasks](#17-automating-system-level-tasks)
 18. [Common mistakes](#18-common-mistakes)
-19. [Interview questions and answers](#19-interview-questions-and-answers)
+19. [Questions and answers](#19-questions-and-answers)
 20. [Day 3 summary](#20-day-3-summary)
 
 ---
@@ -854,7 +854,7 @@ The same idea powers real tools: CI pipelines (YAML), Ansible playbooks (YAML), 
 
 ---
 
-## 19. Interview questions and answers
+## 19. Questions and answers
 
 **Q1. What is the difference between `csv.reader` and `csv.DictReader`?**
 `csv.reader` returns each row as a list (access by index). `csv.DictReader` returns each row as a dictionary keyed by the header row (access by column name), which is more readable and does not break when columns are reordered.
