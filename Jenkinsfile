@@ -40,28 +40,43 @@ pipeline {
             }
         }
 
-        stage('Setup') {
-            steps {
-                bat '''
-                    if not exist .venv\\Scripts\\python.exe python -m venv .venv
-                    .venv\\Scripts\\python -m pip install --quiet --upgrade pip
-                    .venv\\Scripts\\python -m pip install --quiet -r requirements.txt
-                    call npm ci
-                '''
+        // Commits that only touch other folders skip setup and tests. Manual builds always run.
+        stage('Build and test') {
+            when {
+                anyOf {
+                    triggeredBy 'UserIdCause'
+                    changeset 'automation_framework/**'
+                    changeset 'requirements.txt'
+                    changeset 'package.json'
+                    changeset 'package-lock.json'
+                    changeset 'Jenkinsfile'
+                }
             }
-        }
+            stages {
+                stage('Setup') {
+                    steps {
+                        bat '''
+                            if not exist .venv\\Scripts\\python.exe python -m venv .venv
+                            .venv\\Scripts\\python -m pip install --quiet --upgrade pip
+                            .venv\\Scripts\\python -m pip install --quiet -r requirements.txt
+                            call npm ci
+                        '''
+                    }
+                }
 
-        stage('Run tests') {
-            steps {
-                script {
-                    def marker = params.MARKER?.trim() ? "-m ${params.MARKER.trim()}" : ''
-                    int rc = bat(returnStatus: true, script: """
-                        cd automation_framework
-                        ..\\.venv\\Scripts\\python run_tests.py --no-prompt --app ${params.TEST_APP} --env ${params.TEST_ENV} ${marker} --junitxml=reports/junit.xml
-                    """)
-                    if (rc != 0) {
-                        // failing tests -> yellow (unstable) build, reports are still published
-                        unstable("Tests finished with exit code ${rc}")
+                stage('Run tests') {
+                    steps {
+                        script {
+                            def marker = params.MARKER?.trim() ? "-m ${params.MARKER.trim()}" : ''
+                            int rc = bat(returnStatus: true, script: """
+                                cd automation_framework
+                                ..\\.venv\\Scripts\\python run_tests.py --no-prompt --app ${params.TEST_APP} --env ${params.TEST_ENV} ${marker} --junitxml=reports/junit.xml
+                            """)
+                            if (rc != 0) {
+                                // failing tests -> yellow (unstable) build, reports are still published
+                                unstable("Tests finished with exit code ${rc}")
+                            }
+                        }
                     }
                 }
             }
