@@ -27,6 +27,8 @@ pipeline {
     }
 
     environment {
+        // the Jenkins service does not inherit the user PATH: add Python 3.13 and Node.js explicitly
+        PATH = "C:\\Users\\ADMIN\\AppData\\Local\\Programs\\Python\\Python313;C:\\Users\\ADMIN\\AppData\\Local\\Programs\\Python\\Python313\\Scripts;C:\\Program Files\\nodejs;${env.PATH}"
         PYTHONUTF8 = '1'
         CI = 'true'                  // run_tests.py never prompts for the application when CI is set
     }
