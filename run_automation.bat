@@ -18,15 +18,39 @@ pushd "%~dp0automation_framework" || (
     exit /b 1
 )
 
-where python >nul 2>&1
+REM Pick a stable Python (pre-release versions such as 3.15 have no prebuilt
+REM wheels, so PyYAML etc. fail to install). Override with: set PYTHON=...
+if not defined PYTHON (
+    for %%V in (3.13 3.12 3.11 3.10) do (
+        if not defined PYTHON (
+            py -%%V -c "import sys" >nul 2>&1 && set "PYTHON=py -%%V"
+        )
+    )
+)
+if not defined PYTHON set "PYTHON=python"
+
+%PYTHON% -c "import sys" >nul 2>&1
 if errorlevel 1 (
-    echo Python was not found on PATH. Install Python 3 and try again.
+    echo Python was not found. Install Python 3.10-3.13 and try again.
     popd
     pause
     exit /b 1
 )
 
-python run_tests.py %*
+REM Install dependencies on first run / when PyYAML etc. are missing
+%PYTHON% -c "import yaml, pytest" >nul 2>&1
+if errorlevel 1 (
+    echo Installing dependencies from requirements.txt ...
+    %PYTHON% -m pip install -r "%~dp0requirements.txt"
+    if errorlevel 1 (
+        echo Dependency installation failed.
+        popd
+        pause
+        exit /b 1
+    )
+)
+
+%PYTHON% run_tests.py %*
 set "RESULT=%ERRORLEVEL%"
 
 popd

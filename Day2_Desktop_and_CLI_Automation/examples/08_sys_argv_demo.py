@@ -3,7 +3,7 @@
 ===================
 Day 2 - Command-line arguments the simple way: sys.argv
 
-sys.argv is a plain Python LIST of strings:
+    sys.argv is a plain Python LIST of strings:
     sys.argv[0]  -> the script name
     sys.argv[1:] -> everything the user typed after the script name
 

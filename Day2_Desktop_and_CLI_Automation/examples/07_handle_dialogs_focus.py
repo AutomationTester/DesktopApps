@@ -16,7 +16,7 @@ WHY IT MATTERS FOR TESTERS
       typed into the wrong app (maybe your e-mail!).
     * Dialogs are separate windows that BLOCK their owner. Until the dialog
       is handled, the main window ignores input -> tests "hang".
-    * Never use time.sleep() to wait for UI; use wait()/exists(timeout=...).
+    * use time.sleep() to wait for UI for a short period; use wait()/exists(timeout=...).
 
 NOTE: Notepad restores the user's tabs. We never call close() on Notepad.
 """

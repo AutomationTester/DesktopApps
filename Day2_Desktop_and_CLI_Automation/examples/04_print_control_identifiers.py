@@ -43,7 +43,7 @@ def main() -> None:
 
     # depth limits how deep the tree is printed (full tree is very long)
     print("=" * 70)
-    print("Control tree of Calculator (depth=4)")
+    print("Control tree of Calculator (depth=3)")
     print("=" * 70)
     calc.print_control_identifiers(depth=4)
 
