@@ -16,7 +16,7 @@ pipeline {
 
     triggers {
         pollSCM('H/5 * * * *')   // build when new commits land
-        cron('H 2 * * *')        // nightly regression
+      //  cron('H 2 * * *')        // nightly regression
     }
 
     options {
