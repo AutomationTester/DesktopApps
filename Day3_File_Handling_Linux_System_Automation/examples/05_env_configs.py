@@ -86,7 +86,7 @@ def show(config):
 def main():
     parser = argparse.ArgumentParser(description="Environment-aware config loader")
     # Default comes from the TEST_ENV env var, falling back to "dev"
-    parser.add_argument("--env", default=os.environ.get("TEST_ENV", "dev"), choices=VALID_ENVS)
+    parser.add_argument("--env", default=os.environ.get("TEST_ENV", "prod"), choices=VALID_ENVS)
     parser.add_argument("--demo-overrides", action="store_true",
                         help="Temporarily set some env vars inside this process to show overrides")
     args = parser.parse_args()
