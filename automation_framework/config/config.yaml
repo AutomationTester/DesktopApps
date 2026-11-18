@@ -24,7 +24,7 @@ environments:
     excel:
       visible: true        # show the Excel window while the tests run (set false for faster, hidden runs)
     cli:
-      command_timeout: 30
+      command_timeout: 20
 
   qa:
     log_level: INFO

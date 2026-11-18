@@ -1,0 +1,6 @@
+15:52:21 | DEBUG   | Deleted stale report report_after.txt
+15:52:21 | INFO    | Starting export job
+15:52:21 | DEBUG   | Command: ['C:\\Users\\ADMIN\\Desktop\\DesktopApps\\.venv\\Scripts\\python.exe', '-c', "import sys, time, random; time.sleep(random.uniform(0.5, 2.0)); open(sys.argv[1], 'w', encoding='utf-8').write('TOTAL=42\\n')", 'c:\\Users\\ADMIN\\Desktop\\DesktopApps\\Day4_Framework_PyTest_Logging_AI\\examples\\report_after.txt']
+15:52:22 | INFO    | Job finished in 1.54s
+15:52:22 | INFO    | Report content verified: TOTAL=42
+15:52:22 | INFO    | RESULT: PASS
