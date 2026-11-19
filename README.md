@@ -7,18 +7,17 @@
 ```
 DesktopApps/
 |-- README.md                  <- you are here
-|-- TRAINER_GUIDE.md           <- delivery plan, schedule, syllabus coverage checklist, tips
 |-- requirements.txt           <- pip install -r requirements.txt
 |-- package.json               <- npm install  (Allure 3 report CLI)
 |-- .gitignore
 |-- .github/workflows/
 |   `-- automation-ci.yml      <- CI: CLI tests (Linux+Windows matrix) + desktop tests (self-hosted)
 |
-|-- Day1_Python_Fundamentals_OOP_Debugging/
-|-- Day2_Desktop_and_CLI_Automation/
-|-- Day3_File_Handling_Linux_System_Automation/
-|-- Day4_Framework_PyTest_Logging_AI/
-|-- Day5_Git_CICD_BestPractices_MiniProject/
+|-- Day1_Python_Fundamentals_OOP_Debugging/examples/
+|-- Day2_Desktop_and_CLI_Automation/examples/
+|-- Day3_File_Handling_Linux_System_Automation/examples/
+|-- Day4_Framework_PyTest_Logging_AI/examples/
+|-- Day5_Git_CICD_BestPractices_MiniProject/examples/
 |
 `-- automation_framework/      <- the course framework (Days 4-5, base of the mini project)
     |-- config/config.yaml     <- dev / qa environments
@@ -73,13 +72,6 @@ DesktopApps/
 
 See [automation_framework/README.md](automation_framework/README.md#reports-pytest-html-allure-and-pdf) for details.
 
-## Viewing and exporting the slides
-
-The decks are [Marp](https://marp.app) Markdown:
-- **VS Code:** install *Marp for VS Code*, open `01_Presentation.md`, and click the preview icon. Use *Export Slide Deck* to create **PPTX / PDF / HTML**.
-- **Command line:** `npx @marp-team/marp-cli Day1_Python_Fundamentals_OOP_Debugging/01_Presentation.md --pptx`
-- Trainer notes are HTML comments (`<!-- Trainer notes: ... -->`). Marp exports them as **speaker notes**.
-- **Everything at once:** `python tools/export_materials.py` exports every `.md` file in `Day1`..`Day5` to `exports/`, keeping the Day folder structure. Slide decks become **PPTX + PDF** with speaker notes. Handbooks, quizzes and lab guides become A4 **PDF** documents. Add a filter to export one day only: `python tools/export_materials.py Day2`. Needs Node.js and Edge or Chrome. Re-run it after you edit a `.md` file.
 
 ## Safety rules built into every desktop script
 
