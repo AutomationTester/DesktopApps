@@ -1,0 +1,9 @@
+{
+  "suite": "Calculator lab - JSON data set",
+  "tests": [
+    {"test_id": "LABJ-01", "num1": 8, "operator": "+", "num2": 34, "expected": "42", "priority": "high"},
+    {"test_id": "LABJ-02", "num1": 1000, "operator": "-", "num2": 1, "expected": "999", "priority": "medium"},
+    {"test_id": "LABJ-03", "num1": 0.5, "operator": "*", "num2": 4, "expected": "2", "priority": "medium"},
+    {"test_id": "LABJ-04", "num1": 22, "operator": "/", "num2": 7, "expected": "3.142857142857143", "priority": "low"}
+  ]
+}

@@ -1,0 +1,28 @@
+2026-09-21 09:00:01,102 INFO [AppLauncher] Application DeskBill v3.2.1 starting
+2026-09-21 09:00:01,450 DEBUG [Config] Loaded settings from C:\DeskBill\config.ini
+2026-09-21 09:00:02,017 INFO [Database] Connected to db-qa-01:5432
+2026-09-21 09:00:02,318 INFO [LoginService] Login screen displayed
+2026-09-21 09:00:05,871 INFO [LoginService] User 'tester01' logged in
+2026-09-21 09:00:06,004 DEBUG [UI] MainWindow rendered in 412 ms
+2026-09-21 09:00:09,230 WARNING [PrinterService] Default printer not found, using PDF
+2026-09-21 09:00:12,775 INFO [InvoiceModule] New invoice form opened
+2026-09-21 09:00:15,102 ERROR [InvoiceModule] Validation failed: field 'GSTIN' is empty
+2026-09-21 09:00:18,660 INFO [InvoiceModule] Invoice INV-1001 saved
+2026-09-21 09:00:21,309 DEBUG [Cache] Cache hit ratio 0.87
+2026-09-21 09:00:25,441 WARNING [Network] Slow response from payment gateway (2350 ms)
+2026-09-21 09:00:30,012 ERROR [PaymentService] Timeout while contacting gateway after 30 s
+2026-09-21 09:00:30,015 INFO [PaymentService] Retrying payment (attempt 2 of 3)
+2026-09-21 09:00:33,870 INFO [PaymentService] Payment for INV-1001 approved
+2026-09-21 09:00:40,221 INFO [ReportModule] Daily report requested
+2026-09-21 09:00:41,998 ERROR [ReportModule] NullReferenceException in ReportBuilder.Render()
+2026-09-21 09:00:42,003 WARNING [ReportModule] Falling back to basic report template
+2026-09-21 09:00:45,540 INFO [ReportModule] Report saved to C:\Reports\daily_2026-09-21.pdf
+2026-09-21 09:01:02,117 DEBUG [UI] Tooltip shown for 'Export' button
+2026-09-21 09:01:10,660 INFO [ExportModule] Export to Excel started
+2026-09-21 09:01:14,093 ERROR [ExportModule] Access denied: C:\Exports\invoices.xlsx is locked by another process
+2026-09-21 09:01:20,450 CRITICAL [Database] Connection lost to db-qa-01:5432
+2026-09-21 09:01:21,002 INFO [Database] Reconnecting ...
+2026-09-21 09:01:23,771 INFO [Database] Connected to db-qa-01:5432
+2026-09-21 09:01:30,305 WARNING [Memory] Working set 812 MB exceeds soft limit 800 MB
+2026-09-21 09:01:45,888 INFO [LoginService] User 'tester01' logged out
+2026-09-21 09:01:46,010 INFO [AppLauncher] Application closed normally (exit code 0)

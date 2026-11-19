@@ -1,0 +1,31 @@
+# =====================================================================
+# STARTER - mini project configuration snippet
+# ---------------------------------------------------------------------
+# MERGE a `mini_project:` block into EACH environment of
+# automation_framework/config/config.yaml (same indentation as `timeouts:`).
+# Keys missing here fall back to DEFAULTS in workflows/mini_project_settings.py.
+#
+# TODO:
+#   * dev should use test_data/expressions.csv (small and fast)
+#   * qa  should use a BIGGER data file you create: test_data/expressions_qa.csv
+#     (include decimals, a negative number and a non-integer result)
+#   * qa keeps more log archives than dev
+# Then prove it:   pytest -m cli --env dev   and   pytest -m cli --env qa
+# =====================================================================
+
+environments:
+  dev:
+    mini_project:
+      expressions_file: expressions.csv
+      report_prefix: calc_report_dev
+      archive:
+        pattern: "*.log"
+        keep_last: 3
+
+  qa:
+    mini_project:
+      expressions_file: expressions.csv       # TODO: change to expressions_qa.csv
+      report_prefix: calc_report_qa
+      archive:
+        pattern: "*.log"
+        keep_last: 3                          # TODO: keep more archives in qa

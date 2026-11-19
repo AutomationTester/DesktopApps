@@ -1,0 +1,6 @@
+test_id,num1,operator,num2,expected
+add_small,7,+,8,15
+subtract_negative_result,5,-,9,-4
+multiply,12,*,11,132
+divide,84,/,4,21
+multiply_by_zero,250,*,0,0

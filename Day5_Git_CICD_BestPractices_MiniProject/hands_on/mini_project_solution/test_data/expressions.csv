@@ -1,0 +1,5 @@
+id,expression,expected
+EXP_01,7 + 8,15
+EXP_02,100 - 45,55
+EXP_03,12 * 12,144
+EXP_04,81 / 9,9

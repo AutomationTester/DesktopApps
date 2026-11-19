@@ -1,0 +1,22 @@
+# Lab 4 - CLI checks executed by:  python lab4_config_cli.py run --env qa
+# Placeholders:  {python} -> current interpreter,  {env} -> selected environment,
+#                {retries} -> value of 'retries' from the env config
+checks:
+  - name: interpreter available
+    command: ["{python}", "--version"]
+    expect_returncode: 0
+    expect_in_stdout: "Python"
+
+  - name: child process sees TEST_ENV
+    command: ["{python}", "-c", "import os; print('env=' + os.environ['TEST_ENV'])"]
+    expect_returncode: 0
+    expect_in_stdout: "env={env}"
+
+  - name: retries value passed as argument
+    command: ["{python}", "-c", "import sys; print('retries', sys.argv[1])", "{retries}"]
+    expect_returncode: 0
+    expect_in_stdout: "retries {retries}"
+
+  - name: tool exits with code 3 on bad input
+    command: ["{python}", "-c", "import sys; sys.exit(3)"]
+    expect_returncode: 3

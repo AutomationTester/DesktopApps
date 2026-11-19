@@ -1,0 +1,92 @@
+# =====================================================================
+# mini-project-ci.yml - CI for the Day 5 mini project
+# ---------------------------------------------------------------------
+# Destination in YOUR repo:  .github/workflows/mini-project-ci.yml
+# (or merge the extra steps into the course's automation-ci.yml)
+#
+#   cli-tests      : ubuntu + windows, runs test_cli.py, test_log_archiver_cli.py
+#                    and the pure workflow unit tests (all marked `cli`)
+#   desktop-tests  : end-to-end Calculator -> Notepad workflow on a SELF-HOSTED
+#                    Windows 10/11 runner (enable with repo variable
+#                    DESKTOP_RUNNER_AVAILABLE = true)
+#   nightly        : cron, full regression against qa
+# =====================================================================
+name: Mini Project CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+  schedule:
+    - cron: "30 20 * * *"            # 02:00 IST every night
+  workflow_dispatch:
+    inputs:
+      env:
+        description: "Environment from config.yaml"
+        default: qa
+        type: choice
+        options: [ dev, qa ]
+
+env:
+  TEST_ENV: ${{ inputs.env || 'qa' }}
+
+jobs:
+  cli-tests:
+    name: CLI + unit tests (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ ubuntu-latest, windows-latest ]
+    defaults:
+      run:
+        working-directory: automation_framework
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Install dependencies
+        run: pip install -r ../requirements.txt
+      - name: Run CLI and unit tests
+        run: pytest -m cli --env ${{ env.TEST_ENV }} --html=reports/report.html --self-contained-html
+      - name: Smoke-run the archiver tool itself
+        run: |
+          python tools/log_archiver_cli.py collect --output reports/sysinfo
+          python tools/log_archiver_cli.py archive --source logs --dest reports/archives --keep 3
+      - name: Upload report, logs and archives
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mini-project-cli-${{ matrix.os }}
+          path: |
+            automation_framework/reports/
+            automation_framework/logs/
+
+  desktop-tests:
+    name: Desktop E2E (self-hosted Windows)
+    if: vars.DESKTOP_RUNNER_AVAILABLE == 'true'
+    runs-on: [ self-hosted, windows ]
+    needs: cli-tests
+    timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: automation_framework
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install dependencies
+        run: python -m pip install -r ../requirements.txt
+      - name: Run desktop tests (incl. end-to-end workflow)
+        run: python -m pytest -m desktop --env ${{ env.TEST_ENV }} --html=reports/report.html --self-contained-html
+      - name: Upload report, logs and screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mini-project-desktop
+          path: |
+            automation_framework/reports/
+            automation_framework/logs/
+            automation_framework/screenshots/
+          if-no-files-found: ignore
