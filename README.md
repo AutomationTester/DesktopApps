@@ -1,12 +1,6 @@
-# Python Desktop Application Automation Testing - Course Kit
+# Python Desktop Application Automation Testing 
 
-**5 days · 40 hours** · Windows 11 · Python 3.12+ · pywinauto · PyTest · GitHub Actions
-
-A complete, ready-to-deliver course: slide decks, trainee reading material, runnable examples, hands-on labs with starter and solution code, quizzes, a production-style automation framework, and a capstone mini project.
-
-> Trainers: start with **[TRAINER_GUIDE.md](TRAINER_GUIDE.md)**. It has the delivery plan, setup checklist, and the syllabus coverage checklist.
-
----
+ Windows 11 · Python 3.12+ · pywinauto · PyTest · GitHub Actions
 
 ## Project structure
 
@@ -38,21 +32,6 @@ DesktopApps/
     |-- allurerc.mjs           <- Allure report settings
     `-- tools/allure_pdf_report.py <- Allure results -> PDF
 ```
-
-Every **DayN** folder follows the same layout:
-
-| Item | What it is | Audience |
-|---|---|---|
-| `01_Presentation.md` | Slide deck (Marp format) with trainer notes on every slide | Trainer (presenting) |
-| `02_Reading_Material.md` | Handbook: explanations, examples, common mistakes, cheat sheets, questions & answers | Trainees |
-| `03_Quiz.md` | 20 MCQs + answer key with explanations | Trainees / assessment |
-| `examples/` | Numbered, runnable demo scripts used in the slides | Trainer demos + trainees |
-| `hands_on/Lab_Guide.md` | Step-by-step labs: objective, time, tasks, expected output, hints, stretch goals | Trainees |
-| `hands_on/starter/` | Lab starting files with `# TODO` markers | Trainees |
-| `hands_on/solutions/` | Complete, tested solutions | Trainer |
-
-Day 4 also has a mini framework lab (`hands_on/*/mini_framework`). Day 5 also has `hands_on/Mini_Project.md` with the starter kit and reference solution.
-
 ## Course outline
 
 | Day | Topic | Folder |
@@ -63,7 +42,7 @@ Day 4 also has a mini framework lab (`hands_on/*/mini_framework`). Day 5 also ha
 | 4 | Framework design, logging, PyTest, HTML reports, AI basics | [Day4_Framework_PyTest_Logging_AI](Day4_Framework_PyTest_Logging_AI/) |
 | 5 | Git, GitHub Actions CI/CD, best practices, mini project | [Day5_Git_CICD_BestPractices_MiniProject](Day5_Git_CICD_BestPractices_MiniProject/) |
 
-## Setup (each trainee machine)
+## Setup 
 
 1. Install **Python 3.12+** from python.org (tick *Add python.exe to PATH*), **Node.js LTS** (for the Allure report), **Git for Windows** (includes Git Bash), and **VS Code** with the *Python* extension. Optional: the *Marp for VS Code* extension to view the slides.
 2. Open a terminal in this folder:
